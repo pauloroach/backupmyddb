@@ -1,0 +1,32 @@
+﻿@model List<backupmyddb.Models.Ddbdatabase>
+@{
+    ViewBag.Title = "Index";
+}
+<h2>Your DocumentDB databases</h2>
+
+<table class="table">
+    <tr>
+        <th>Database</th>
+        <th>URI</th>
+        <th>Primary Key</th>
+        <th>Options</th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Endpoint)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Authkey)
+            </td>
+            <td>
+                <button>Edit</button>
+                <button>Delete</button>
+            </td>
+        </tr>
+    }
+</table>
