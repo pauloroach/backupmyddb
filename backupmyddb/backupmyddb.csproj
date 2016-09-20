@@ -248,6 +248,9 @@
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Images\DocumentDB-reliable-configurable-performance.png" />
+    <Content Include="Content\Images\documentdb.png" />
+    <Content Include="Content\Images\WhatisAzureDocumentDB_960.jpg" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -307,6 +310,8 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Ddbdatabase\Index.cshtml" />
     <Content Include="Views\Ddbdatabase\Create.cshtml" />
+    <Content Include="Views\Ddbdatabase\Edit.cshtml" />
+    <Content Include="Views\Ddbdatabase\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

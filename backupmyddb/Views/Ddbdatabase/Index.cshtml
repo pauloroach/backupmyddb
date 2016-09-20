@@ -24,8 +24,8 @@
                 @Html.DisplayFor(modelItem => item.Authkey)
             </td>
             <td>
-                <button>Edit</button>
-                <button>Delete</button>
+                @Html.ActionLink("Edit", "Edit", new { id = item.ID })
+                @Html.ActionLink("Delete", "Delete", new { id = item.ID })
             </td>
         </tr>
     }

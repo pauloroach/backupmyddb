@@ -16,6 +16,7 @@ using System.Net;
 
 namespace backupmyddb.Controllers
 {
+    [Authorize]
     public class DdbdatabaseController : Controller
     {
         private DdbContext db = new DdbContext();
@@ -36,6 +37,7 @@ namespace backupmyddb.Controllers
         public ActionResult Create()
         {
             return View();
+            
         }
 
         // POST: Ddbdatabase/Create
@@ -63,25 +65,49 @@ namespace backupmyddb.Controllers
         }
 
         // GET: Ddbdatabase/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int? id)
         {
-            return View();
+            //Return bad request if id is null
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var databaseToUpdate = db.Ddbdatabases.Find(id);
+            if (databaseToUpdate != null)
+            {
+                return View(databaseToUpdate);
+            }
+            else
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+            }
         }
 
         // POST: Ddbdatabase/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(int? id, FormCollection collection)
         {
-            try
+            if(id == null)
             {
-                // TODO: Add update logic here
-
-                return RedirectToAction("Index");
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            catch
+            var databaseToUpdate = db.Ddbdatabases.Find(id);
+            if (TryUpdateModel(databaseToUpdate, "", new string[] { "Name", "Endpoint", "Authkey" }))
             {
-                return View();
+                try
+                {
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                catch
+                {
+                    ModelState.AddModelError("", "Unable to save changes.");
+                    return View();
+                }
             }
+            return View(databaseToUpdate);
         }
 
         // GET: Ddbdatabase/Delete/5

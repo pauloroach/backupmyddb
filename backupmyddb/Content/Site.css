@@ -22,3 +22,7 @@ select,
 textarea {
     max-width: 280px;
 }
+
+.mybg {
+    background: url(/Content/Images/WhatisAzureDocumentDB_960.jpg) repeat-x;
+}
