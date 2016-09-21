@@ -265,6 +265,5 @@ C:\Users\Ing. Paulo Guevara\Source\Repos\backupmyddb\backupmyddb\bin\ko\System.S
 C:\Users\Ing. Paulo Guevara\Source\Repos\backupmyddb\backupmyddb\bin\ru\System.Spatial.resources.dll
 C:\Users\Ing. Paulo Guevara\Source\Repos\backupmyddb\backupmyddb\bin\zh-Hans\System.Spatial.resources.dll
 C:\Users\Ing. Paulo Guevara\Source\Repos\backupmyddb\backupmyddb\bin\zh-Hant\System.Spatial.resources.dll
-C:\Users\Ing. Paulo Guevara\Source\Repos\backupmyddb\backupmyddb\obj\Debug\backupmyddb.csprojResolveAssemblyReference.cache
 C:\Users\Ing. Paulo Guevara\Source\Repos\backupmyddb\backupmyddb\obj\Debug\backupmyddb.dll
 C:\Users\Ing. Paulo Guevara\Source\Repos\backupmyddb\backupmyddb\obj\Debug\backupmyddb.pdb

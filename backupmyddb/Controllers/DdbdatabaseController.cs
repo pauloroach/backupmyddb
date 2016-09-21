@@ -20,6 +20,8 @@ namespace backupmyddb.Controllers
     public class DdbdatabaseController : Controller
     {
         private DdbContext db = new DdbContext();
+        //Reusable instance of DocumentClient which represents the connection to a DocumentDB endpoint
+        private static DocumentClient client;
 
         // GET: Ddbdatabase
         public ActionResult Index()
@@ -127,6 +129,7 @@ namespace backupmyddb.Controllers
                 return HttpNotFound();
             }
             return View(Ddbdatabase);
+            
         }
 
         // POST: Ddbdatabase/Delete/5
@@ -147,10 +150,79 @@ namespace backupmyddb.Controllers
             return RedirectToAction("Index");
         }
 
+        public async Task<ActionResult> Connect(int? id)
+        {
+            HttpContext.Server.ScriptTimeout = 300;
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            //Get database info
+            var databaseToUpdate = db.Ddbdatabases.Find(id);
+            if(databaseToUpdate != null)
+            {
+                try
+                {
+                    List<Database> databases = await ListDatabasesAsync(databaseToUpdate.Endpoint, databaseToUpdate.Authkey);
+                    //Console.WriteLine(databases);
+                } catch (DocumentClientException de)
+                {
+                    Exception baseException = de.GetBaseException();
+                    Console.WriteLine("{0} error ocurred: {1}, Message: {2}", de.StatusCode, de.Message, baseException.Message);
+                }
+            }
+            return View();
+        }
+
         protected override void Dispose(bool disposing)
         {
             db.Dispose();
             base.Dispose(disposing);
+        }
+
+        private static async Task runExample()
+        {
+            var databaseId = "dev";
+            Database database = client.CreateDatabaseQuery().Where(db => db.Id == databaseId).AsEnumerable().FirstOrDefault();
+            Console.WriteLine("1. Query for a database returned: {0}", database == null ? "no results" : database.Id);
+
+
+            var colls = await client.ReadDocumentCollectionFeedAsync(UriFactory.CreateDatabaseUri(databaseId));
+            Console.WriteLine("\n5. Reading all DocumentCollection resources for a database");
+            foreach (var coll in colls)
+            {
+                Console.WriteLine(coll);
+            }
+        }
+
+        
+
+        private static async Task<List<Database>> ListDatabasesAsync(string Endpoint, string Authkey)
+        {
+            string continuation = null;
+            List<Database> databases = new List<Database>();
+            using (client = new DocumentClient(new Uri(Endpoint), Authkey))
+            {
+                do
+                {
+                    FeedOptions options = new FeedOptions
+                    {
+                        RequestContinuation = continuation,
+                        MaxItemCount = 50
+                    };
+
+                    FeedResponse<Database> response = await client.ReadDatabaseFeedAsync(options);
+                    foreach (Database db in response)
+                    {
+                        databases.Add(db);
+                    }
+
+                    continuation = response.ResponseContinuation;
+                }
+                while (!String.IsNullOrEmpty(continuation));
+            }
+            return databases;
         }
     }
 }

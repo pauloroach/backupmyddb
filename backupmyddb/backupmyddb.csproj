@@ -312,6 +312,7 @@
     <Content Include="Views\Ddbdatabase\Create.cshtml" />
     <Content Include="Views\Ddbdatabase\Edit.cshtml" />
     <Content Include="Views\Ddbdatabase\Delete.cshtml" />
+    <Content Include="Views\Ddbdatabase\Connect.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
