@@ -1,0 +1,12 @@
+﻿
+@{
+    ViewBag.Title = "GetAllDocuments";
+}
+
+<h2>GetAllDocuments</h2>
+
+@{foreach (var documents in ViewBag.Documents)
+    {
+        @documents
+    }
+}

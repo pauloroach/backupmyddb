@@ -1,18 +1,19 @@
 ﻿using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
-using Microsoft.Azure.Documents.Linq;
 using backupmyddb.DAL;
 using backupmyddb.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Web;
-using System.Configuration;
 using System.Threading.Tasks;
-using System.Linq.Expressions;
 using System.Web.Mvc;
 using System.Net;
+
+using Microsoft.Azure; // Namespace for CloudConfigurationManager
+using Microsoft.WindowsAzure.Storage; // Namespace for CloudStorageAccount
+using Microsoft.WindowsAzure.Storage.Blob; // Namespace for Blob storage types
+
 
 namespace backupmyddb.Controllers
 {
@@ -175,6 +176,35 @@ namespace backupmyddb.Controllers
             return View();
         }
 
+        public async Task<ActionResult> GetAllDocuments(int? id, string databaseName)
+        {
+            HttpContext.Server.ScriptTimeout = 300;
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                
+            }
+
+            var databaseToUse = db.Ddbdatabases.Find(id);
+            if(databaseToUse != null)
+            {
+                try
+                {
+                    List<Document> collections = await GetAllDocumentsAsync(databaseToUse.Endpoint, databaseToUse.Authkey, databaseName, "ticketsCollection");
+                    //List<Database> databases = await ListDatabasesAsync(databaseToUpdate.Endpoint, databaseToUpdate.Authkey);
+                    Console.WriteLine(collections);
+                    ViewBag.Documents = collections;
+                }
+                catch (DocumentClientException de)
+                {
+                    Exception baseException = de.GetBaseException();
+                    Console.WriteLine("{0} error ocurred: {1}, Message: {2}", de.StatusCode, de.Message, baseException.Message);
+                }
+            }
+            return View();
+
+        }
+
         protected override void Dispose(bool disposing)
         {
             db.Dispose();
@@ -196,8 +226,46 @@ namespace backupmyddb.Controllers
             }
         }
 
-        
+        private static async Task<List<Document>> GetAllDocumentsAsync(string Endpoint, string Authkey, string databaseId, string collectionId)
+        {
+            string continuation = null;
+            var documents = new List<Document>();
+            var collectionLink = UriFactory.CreateDocumentCollectionUri(databaseId, collectionId);
+            using (client = new DocumentClient(new Uri(Endpoint), Authkey))
+            {
+                do
+                {
+                    FeedOptions options = new FeedOptions
+                    {
+                        RequestContinuation = continuation,
+                        MaxItemCount = 100
+                    };
 
+                    var docs = await client.ReadDocumentFeedAsync(collectionLink, options);
+                    foreach (var d in docs)
+                    {
+                        documents.Add(d);
+                    }
+                    continuation = docs.ResponseContinuation;
+                }
+                while (!String.IsNullOrEmpty(continuation));
+            }
+            return documents;
+        }
+
+        /*
+
+        private static async Task<List<DocumentCollection>> ListCollectionsAsync(string Endpoint, string Authkey, string databaseId)
+        {
+            
+            List<Database> databases = new List<Database>();
+            using (client = new DocumentClient(new Uri(Endpoint), Authkey))
+            {
+                var colls = await client.ReadDocumentCollectionFeedAsync(UriFactory.CreateDatabaseUri(databaseId));
+            }
+            return colls;
+        }
+        */
         private static async Task<List<Database>> ListDatabasesAsync(string Endpoint, string Authkey)
         {
             string continuation = null;

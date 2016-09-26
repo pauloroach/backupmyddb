@@ -267,3 +267,5 @@ C:\Users\Ing. Paulo Guevara\Source\Repos\backupmyddb\backupmyddb\bin\zh-Hans\Sys
 C:\Users\Ing. Paulo Guevara\Source\Repos\backupmyddb\backupmyddb\bin\zh-Hant\System.Spatial.resources.dll
 C:\Users\Ing. Paulo Guevara\Source\Repos\backupmyddb\backupmyddb\obj\Debug\backupmyddb.dll
 C:\Users\Ing. Paulo Guevara\Source\Repos\backupmyddb\backupmyddb\obj\Debug\backupmyddb.pdb
+C:\Users\Ing. Paulo Guevara\Source\Repos\backupmyddb\backupmyddb\obj\Debug\backupmyddb.Migrations.addblob.resources
+C:\Users\Ing. Paulo Guevara\Source\Repos\backupmyddb\backupmyddb\obj\Debug\backupmyddb.csproj.GenerateResource.Cache

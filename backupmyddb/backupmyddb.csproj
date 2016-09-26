@@ -227,6 +227,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\BlobController.cs" />
     <Compile Include="Controllers\DdbcollectionController.cs" />
     <Compile Include="Controllers\DdbdatabaseController.cs" />
     <Compile Include="Controllers\DdbstoredprocedureController.cs" />
@@ -236,10 +237,15 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201609241940480_addblob.cs" />
+    <Compile Include="Migrations\201609241940480_addblob.Designer.cs">
+      <DependentUpon>201609241940480_addblob.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\BlobModels.cs" />
     <Compile Include="Models\DdbcollectionModels.cs" />
     <Compile Include="Models\DdbdatabaseModels.cs" />
-    <Compile Include="Models\DdbstoredprocedureModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -313,6 +319,17 @@
     <Content Include="Views\Ddbdatabase\Edit.cshtml" />
     <Content Include="Views\Ddbdatabase\Delete.cshtml" />
     <Content Include="Views\Ddbdatabase\Connect.cshtml" />
+    <Content Include="Views\Ddbdatabase\GetAllDocuments.cshtml" />
+    <Content Include="Views\Blob\Index.cshtml" />
+    <Content Include="Views\Blob\Create.cshtml" />
+    <Content Include="Views\Blob\Edit.cshtml" />
+    <Content Include="Views\Blobs\Create.cshtml" />
+    <Content Include="Views\Blobs\Delete.cshtml" />
+    <Content Include="Views\Blobs\Details.cshtml" />
+    <Content Include="Views\Blobs\Edit.cshtml" />
+    <Content Include="Views\Blobs\Index.cshtml" />
+    <Content Include="Views\Blob\Delete.cshtml" />
+    <Content Include="Views\Blob\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -326,6 +343,11 @@
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201609241940480_addblob.resx">
+      <DependentUpon>201609241940480_addblob.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

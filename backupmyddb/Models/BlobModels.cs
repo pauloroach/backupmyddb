@@ -4,16 +4,16 @@ namespace backupmyddb.Models
     using System.Data.Entity;
     using System.Linq;
 
-    public class DdbstoredprocedureModels : DbContext
+    public class BlobModels : DbContext
     {
-        // Your context has been configured to use a 'DdbstoredprocedureModels' connection string from your application's 
+        // Your context has been configured to use a 'BlobModel' connection string from your application's 
         // configuration file (App.config or Web.config). By default, this connection string targets the 
-        // 'backupmyddb.Models.DdbstoredprocedureModels' database on your LocalDb instance. 
+        // 'backupmyddb.Models.BlobModel' database on your LocalDb instance. 
         // 
-        // If you wish to target a different database and/or database provider, modify the 'DdbstoredprocedureModels' 
+        // If you wish to target a different database and/or database provider, modify the 'BlobModel' 
         // connection string in the application configuration file.
-        public DdbstoredprocedureModels()
-            : base("name=DdbstoredprocedureModels")
+        public BlobModels()
+            : base("name=BlobModels")
         {
         }
 
@@ -28,10 +28,10 @@ namespace backupmyddb.Models
     //    public int Id { get; set; }
     //    public string Name { get; set; }
     //}
-
-    public class Ddbstoredprocedure
+    public class Blob
     {
         public int ID { get; set; }
-        public string Name { get; set; }
+        public string AccountName { get; set; }
+        public string AccountKey { get; set; }
     }
 }
