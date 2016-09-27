@@ -5,8 +5,23 @@
 
 <h2>GetAllDocuments</h2>
 
-@{foreach (var documents in ViewBag.Documents)
+
+@{
+
+    try
     {
-        @documents
+        foreach (var documents in ViewBag.Documents)
+        {
+            @documents
+        }
     }
+    catch (Exception e)
+    {
+        
+    }
+
+
+
+
+
 }

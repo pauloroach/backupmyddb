@@ -13,7 +13,7 @@ using System.Net;
 using Microsoft.Azure; // Namespace for CloudConfigurationManager
 using Microsoft.WindowsAzure.Storage; // Namespace for CloudStorageAccount
 using Microsoft.WindowsAzure.Storage.Blob; // Namespace for Blob storage types
-
+using Microsoft.Azure.Documents.Linq;
 
 namespace backupmyddb.Controllers
 {
@@ -190,7 +190,7 @@ namespace backupmyddb.Controllers
             {
                 try
                 {
-                    List<Document> collections = await GetAllDocumentsAsync(databaseToUse.Endpoint, databaseToUse.Authkey, databaseName, "ticketsCollection");
+                    List<Document> collections = await GetAllDocumentsAsyncTS(databaseToUse.Endpoint, databaseToUse.Authkey, databaseName, "ticketsCollection");
                     //List<Database> databases = await ListDatabasesAsync(databaseToUpdate.Endpoint, databaseToUpdate.Authkey);
                     Console.WriteLine(collections);
                     ViewBag.Documents = collections;
@@ -238,7 +238,7 @@ namespace backupmyddb.Controllers
                     FeedOptions options = new FeedOptions
                     {
                         RequestContinuation = continuation,
-                        MaxItemCount = 100
+                        MaxItemCount = 1000
                     };
 
                     var docs = await client.ReadDocumentFeedAsync(collectionLink, options);
@@ -253,8 +253,42 @@ namespace backupmyddb.Controllers
             return documents;
         }
 
-        /*
+        private static async Task<List<Document>> GetAllDocumentsAsyncTS(string Endpoint, string Authkey, String databaseId, string collectionId)
+        {
+            string continuation = null;
+            var documents = new List<Document>();
+            var collectionLink = UriFactory.CreateDocumentCollectionUri(databaseId, collectionId);
+            DateTime currentDateTime = DateTime.Now;
+            using (client = new DocumentClient(new Uri(Endpoint), Authkey))
+            {
+                FeedOptions options = new FeedOptions
+                {
+                    RequestContinuation = continuation,
+                    MaxItemCount = 1000
+                };
 
+                var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+                long currentDateTimeLong = (long)(currentDateTime - epoch).TotalSeconds;
+                IDocumentQuery<MyDocument> queryable = client.CreateDocumentQuery<MyDocument>(collectionLink, options).Where(x => x._ts < currentDateTimeLong).AsDocumentQuery();
+                while (queryable.HasMoreResults)
+                {
+                    FeedResponse<Document> res = await queryable.ExecuteNextAsync<Document>();
+                    if (res.Count != 0)
+                    {
+                        foreach(Document d in res)
+                        {
+                            documents.Add(d);
+                        }
+                        //documents.Add(res.Single());
+                        break;
+                    }
+                } 
+            }
+            return documents;
+        }
+
+
+        /*
         private static async Task<List<DocumentCollection>> ListCollectionsAsync(string Endpoint, string Authkey, string databaseId)
         {
             
@@ -291,6 +325,14 @@ namespace backupmyddb.Controllers
                 while (!String.IsNullOrEmpty(continuation));
             }
             return databases;
+        }
+    }
+
+    public class MyDocument : Document
+    {
+        public long _ts
+        {
+            get; set;
         }
     }
 }
